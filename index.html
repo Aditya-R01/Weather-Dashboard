@@ -359,7 +359,7 @@ async function fetchWeather(lat, lon, cityName, countryCode) {
 
 async function getCoordsAndSuggestions(city) {
     try {
-        const geocodingUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${API_KEY}`;
+        const geocodingUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${API_KEY}`;
         const response = await fetch(geocodingUrl);
         
         if (!response.ok) {
@@ -393,7 +393,7 @@ async function getCoordsAndSuggestions(city) {
 
 async function getCityNameFromCoords(lat, lon) {
     try {
-        const reverseGeocodingUrl = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${API_KEY}`;
+        const reverseGeocodingUrl = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${API_KEY}`;
         const response = await fetch(reverseGeocodingUrl);
         
         if (!response.ok) {
@@ -414,7 +414,7 @@ async function getCityNameFromCoords(lat, lon) {
 
 function displayCurrentWeather(data, cityName, countryCode) {
     const { main, weather, sys, wind } = data;
-    const icon = `http://openweathermap.org/img/wn/${weather[0].icon}@2x.png`;
+    const icon = `https://openweathermap.org/img/wn/${weather[0].icon}@2x.png`;
 
     const sunriseTime = new Date(sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const sunsetTime = new Date(sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -465,7 +465,7 @@ function displayForecast(data) {
     dailyForecasts.forEach(forecast => {
         const date = new Date(forecast.dt * 1000);
         const day = date.toLocaleDateString('en-US', { weekday: 'short' });
-        const icon = `http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`;
+        const icon = `https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`;
         
         const dayHtml = `
             <div class="forecast-day">
@@ -556,3 +556,4 @@ window.addEventListener('load', async () => {
 </script>
 </body>
 </html>
+
