@@ -1,282 +1,631 @@
+/* ===== CSS VARIABLES ===== */
+:root {
+    --bg-dark: #0f1c2d;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-light: #f0f4f8;
+    --text-muted: #a6b2c2;
+    --accent-blue: #007bff;
+    --accent-gold: #FFD700;
+    --glass-effect: rgba(255, 255, 255, 0.08);
+    --hover-effect: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== GLOBAL STYLES ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #001f3f, #004d40);
-    color: #fff;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    margin: 0;
     padding: 20px;
-    box-sizing: border-box;
-    transition: background 0.5s ease;
+    position: relative;
+    overflow-x: hidden;
+    transition: background 0.8s ease;
 }
 
-.weather-container {
-    background: rgba(0, 0, 0, 0.4); 
-    border-radius: 25px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); 
-    text-align: center;
-    max-width: 900px;
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    backdrop-filter: blur(15px); 
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3;
+    filter: blur(5px);
+    z-index: -1;
+    transition: background-image 0.8s ease, opacity 0.8s ease;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.weather-container {
+    max-width: 1200px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(25px);
+    border-radius: 25px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    padding: 30px;
     animation: fadeIn 1s ease-in-out;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-h1 {
-    font-size: 2.5em;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: #fff;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5); 
+/* ===== HEADER & SEARCH ===== */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
 }
 
-.input-section {
+.header h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--text-light);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.search-section {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.search-group {
+    position: relative;
+    flex-grow: 1;
+    max-width: 400px;
 }
 
 #city-input {
-    padding: 12px 15px;
-    border: none;
-    border-radius: 25px;
+    width: 100%;
+    padding: 12px 20px;
+    background: var(--glass-effect);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    color: var(--text-light);
     font-size: 1em;
     outline: none;
-    width: 250px;
-    background: rgba(255, 255, 255, 0.95);
-    color: #333;
     transition: all 0.3s ease;
 }
 
 #city-input:focus {
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 15px var(--accent-blue);
+    border-color: var(--accent-blue);
 }
 
-button {
+#city-suggestions {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 15px 15px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#city-suggestions option {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.main-btn,
+.secondary-btn {
     padding: 12px 25px;
     border: none;
-    border-radius: 25px;
-    
-    background: #FFD700;
-    color: #001f3f; 
-    font-size: 1em;
+    border-radius: 50px;
     font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.main-btn {
+    background: var(--accent-blue);
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+}
+
+.secondary-btn {
+    background: var(--glass-effect);
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+}
+
+.main-btn:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
+}
+
+.secondary-btn:hover {
+    background: var(--hover-effect);
+    transform: translateY(-2px);
+}
+
+.unit-toggle {
+    font-size: 1.1em;
+    font-weight: 500;
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.unit-toggle span {
+    transition: color 0.3s ease;
+    padding: 5px;
+}
+
+.unit-toggle span.active {
+    color: var(--accent-blue);
+    font-weight: 700;
+}
+
+/* ===== CARD STYLES ===== */
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.8s ease-out forwards;
+    opacity: 0;
+    margin-bottom: 25px;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-title {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.muted-text {
+    color: var(--text-muted);
+    font-size: 0.9em;
+}
+
+.status-message {
+    padding: 15px;
+    text-align: center;
+    border-radius: 15px;
+    font-weight: 500;
+    transition: all 0.5s ease;
+    margin-bottom: 20px;
+}
+
+.status-message.hidden {
+    display: none;
+}
+
+.status-message.loading {
+    background: rgba(0, 123, 255, 0.2);
+    color: var(--accent-blue);
+}
+
+.status-message.error {
+    background: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+}
+
+/* ===== CURRENT WEATHER CARD ===== */
+.weather-main-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.weather-visual {
+    text-align: center;
+}
+
+#weather-icon {
+    width: 120px;
+    height: 120px;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+.weather-desc {
+    font-size: 1.1em;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.temperature-info {
+    text-align: center;
+}
+
+#current-temp {
+    font-size: clamp(3.5rem, 8vw, 5rem);
+    font-weight: 700;
+    color: var(--accent-gold);
+    line-height: 1;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.key-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    text-align: center;
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 1.1em;
+}
+
+.metric-item i {
+    font-size: 1.5em;
+    color: var(--accent-gold);
+}
+
+/* ===== HOURLY FORECAST ===== */
+.hourly-forecast-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 10px 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.hourly-forecast-container::-webkit-scrollbar {
+    display: none;
+}
+
+.hourly-card {
+    flex: 0 0 auto;
+    width: 100px;
+    text-align: center;
+    background: var(--glass-effect);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    padding: 15px 10px;
+    transition: transform 0.3s ease;
+}
+
+.hourly-card:hover {
+    transform: translateY(-5px);
+    background: var(--hover-effect);
+}
+
+.hourly-card img {
+    width: 60px;
+    height: 60px;
+}
+
+.hourly-card .hour {
+    font-weight: 500;
+    font-size: 0.9em;
+}
+
+.hourly-card .temp {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: var(--accent-gold);
+}
+
+/* ===== MAP CARD ===== */
+.weather-map {
+    height: 350px;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.map-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.map-btn {
+    padding: 8px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.9em;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-button:hover {
-    background: #FFF5CC; 
-    transform: translateY(-3px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+.map-btn.active {
+    background: var(--accent-blue);
+    color: var(--text-light);
+    border-color: var(--accent-blue);
 }
 
-.weather-display {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 20px;
-    padding: 25px;
-    margin-top: 20px;
-    min-height: 150px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    animation: slideIn 0.8s ease-out;
-}
-
-@keyframes slideIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-.weather-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.weather-info h2 {
-    font-size: 2em;
-    margin: 0;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-}
-
-.weather-info .temperature {
-    font-size: 3.5em;
-    font-weight: 700;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
-    color: #FFD700; /* Gold for the temperature */
-}
-
-.weather-info img {
-    width: 110px;
-    height: 110px;
-    filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.3));
-}
-
-.weather-details {
+/* ===== DAILY FORECAST ===== */
+.daily-forecast-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
+}
+
+.daily-card {
+    flex: 1 1 150px;
+    max-width: 180px;
+    text-align: center;
+    background: var(--glass-effect);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.daily-card:hover {
+    transform: translateY(-8px);
+    background: var(--hover-effect);
+}
+
+.daily-card .day {
+    font-weight: 600;
     font-size: 1.1em;
-    width: 100%;
 }
 
-.widget {
-    background: rgba(255, 255, 255, 0.05); 
-    border-radius: 18px;
-    padding: 18px 10px;
-    text-align: center;
-    flex: 1;
-    min-width: 150px;
+.daily-card .date {
+    font-size: 0.8em;
+    color: var(--text-muted);
+}
+
+.daily-card img {
+    width: 80px;
+    height: 80px;
+}
+
+.daily-card .temps {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
 }
 
-.widget:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+.daily-card .high-temp {
+    font-weight: 700;
+    color: var(--text-light);
 }
 
-.widget i {
-    font-size: 1.8em;
-    color: #FFD700;
+.daily-card .low-temp {
+    color: var(--text-muted);
 }
 
-.widget strong {
-    font-size: 1.2em;
-    color: #FFD700; 
+/* ===== CHART CARD ===== */
+.chart-container {
+    height: 300px;
+    position: relative;
 }
 
-.forecast-display {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 20px;
-    animation: slideIn 1s ease-out;
-}
-
-.forecast-day {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 18px;
-    padding: 15px;
-    text-align: center;
-    width: 120px;
-    flex-grow: 1;
-    min-width: 100px;
-    transition: transform 0.2s ease-in-out, background 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.forecast-day:hover {
-    transform: translateY(-7px);
-    background: rgba(0, 0, 0, 0.3);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-.forecast-day img {
-    width: 60px;
-    height: 60px;
-    margin-top: 5px;
-    filter: drop-shadow(1px 1px 3px rgba(0,0,0,0.2));
-}
-
-.forecast-day strong {
-    color: #FFD700; 
-}
-
+/* ===== FOOTER ===== */
 .footer {
-    margin-top: 30px;
-    font-size: 0.9em;
-    opacity: 0.8;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    text-align: center;
+    margin-top: 40px;
+    color: var(--text-muted);
+    font-size: 0.8em;
 }
 
-.error-message, .loading-message {
-    color: #FFD700; 
-    font-weight: 500;
-    margin-top: 20px;
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 992px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .current-weather-card {
+        order: 1;
+    }
+
+    .hourly-forecast-card {
+        order: 2;
+    }
+
+    .map-card {
+        order: 3;
+    }
+
+    .daily-forecast-card {
+        order: 4;
+    }
+
+    .chart-card {
+        order: 5;
+    }
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
     .weather-container {
-        padding: 25px;
-    }
-    .input-section {
-        flex-direction: column;
-        align-items: center;
-    }
-    #city-input, button {
-        width: 100%;
-        max-width: 400px;
-    }
-    .weather-info h2 {
-        font-size: 1.8em;
-    }
-    .weather-info .temperature {
-        font-size: 2.5em;
-    }
-    .weather-details {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    .input-section {
-        width: 100%;
-        flex-direction: column;
+        padding: 20px;
     }
 
-    #city-input, button {
-        width: 100% !important;
-        max-width: none;
+    .search-section {
+        flex-direction: column;
+        align-items: stretch;
     }
 
+    .search-group {
+        max-width: 100%;
+    }
+
+    .main-btn,
+    .secondary-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
-@media (max-width: 480px) {
-    .widget {
-    min-width: unset;
-    width: 100%;
-    max-width: 300px;
-    }
-    h1 {
-        font-size: 2em;
-    }
-    .weather-container {
-        padding: 15px;
-    }
-    .input-section {
-        gap: 8px;
-    }
-    .forecast-display {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-    .forecast-day {
-        width: 100%;
-        max-width: 250px;
-    }
+/* ===== CSS for the Hourly Forecast section ===== */
 
+.hourly-forecast-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 40px;
+    padding: 10px 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* Hide the scrollbar for a cleaner look */
+.hourly-forecast-container::-webkit-scrollbar {
+    display: none;
+}
+
+.hourly-card {
+    flex: 0 0 auto;
+    width: 100px;
+    text-align: center;
+    background: var(--glass-effect);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    padding: 15px 10px;
+    transition: transform 0.3s ease;
+    
+    /* Corrected Flexbox properties */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    
+    height: 150px; /* Set a fixed height for all cards to ensure vertical alignment */
+}
+
+.hourly-card img {
+    width: 60px;
+    height: 60px;
+    margin: 5px 0; /* Add margin to space out icon */
+}
+
+.hourly-card:hover {
+    transform: translateY(-5px);
+    background: var(--hover-effect);
+}
+
+
+.hourly-card .hour {
+    font-weight: 500;
+    font-size: 0.9em;
+    color: var(--text-muted); /* Use muted color for time */
+}
+
+.hourly-card .temp {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: var(--accent-gold);
+}
+
+/* ===== CSS for the Daily Forecast section ===== */
+
+.daily-forecast-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: center; /* Center the cards */
+    gap: 20px; /* Consistent spacing between cards */
+}
+
+.daily-card {
+    flex: 1 1 150px; /* Allows cards to grow and shrink, with a base of 150px */
+    max-width: 180px; /* Prevents cards from getting too wide on large screens */
+    text-align: center;
+    background: var(--glass-effect);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 20px;
+    transition: transform 0.3s ease;
+    display: flex; /* Use flexbox for vertical alignment */
+    flex-direction: column;
+    align-items: center;
+}
+
+.daily-card:hover {
+    transform: translateY(-8px);
+    background: var(--hover-effect);
+}
+
+.daily-card .day {
+    font-weight: 600;
+    font-size: 1.1em;
+    margin-bottom: 5px; /* Add space below the day */
+}
+
+.daily-card .date {
+    font-size: 0.8em;
+    color: var(--text-muted);
+}
+
+.daily-card img {
+    width: 80px;
+    height: 80px;
+    margin: 10px 0; /* Add margin to space out icon */
+}
+
+.daily-card .temps {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.daily-card .high-temp {
+    font-weight: 700;
+    color: var(--text-light);
+}
+
+.daily-card .low-temp {
+    color: var(--text-muted);
 }
