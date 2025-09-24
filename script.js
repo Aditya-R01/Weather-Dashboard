@@ -344,3 +344,4 @@ window.addEventListener('load', () => {
     cityInput.value = 'New Delhi';
     searchBtn.click();
 });
+
