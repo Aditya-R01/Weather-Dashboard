@@ -142,6 +142,7 @@ function displayHourlyForecast(data) {
 function displayDailyForecast(data) {
     const container = document.getElementById('daily-forecast-container');
     container.innerHTML = '';
+
     const dailyForecasts = data.list.filter(item => item.dt_txt.includes('12:00:00')).slice(0, 7);
     const tempUnit = currentUnit === 'metric' ? '°C' : '°F';
 
@@ -150,6 +151,14 @@ function displayDailyForecast(data) {
         const day = date.toLocaleDateString('en-US', { weekday: 'short' });
         const dayNumber = date.getDate();
 
+        const dayEntries = data.list.filter(item => {
+            const itemDate = new Date(item.dt * 1000);
+            return itemDate.getDate() === date.getDate();
+        });
+
+        const minTemp = Math.min(...dayEntries.map(item => item.main.temp_min));
+        const maxTemp = Math.max(...dayEntries.map(item => item.main.temp_max));
+
         const card = document.createElement('div');
         card.className = 'daily-card';
         card.innerHTML = `
@@ -157,8 +166,8 @@ function displayDailyForecast(data) {
             <span class="date">${dayNumber}</span>
             <img src="${getWeatherIcon(dayData.weather[0].icon)}" alt="${dayData.weather[0].description}">
             <div class="temps">
-                <span class="high-temp">${Math.round(dayData.main.temp_max)}${tempUnit}</span>
-                <span class="low-temp">${Math.round(dayData.main.temp_min)}${tempUnit}</span>
+                <span class="high-temp">${Math.round(maxTemp)}${tempUnit}</span>
+                <span class="low-temp">${Math.round(minTemp)}${tempUnit}</span>
             </div>
         `;
         container.appendChild(card);
@@ -344,4 +353,5 @@ window.addEventListener('load', () => {
     cityInput.value = 'New Delhi';
     searchBtn.click();
 });
+
 
