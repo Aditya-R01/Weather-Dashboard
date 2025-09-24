@@ -229,12 +229,7 @@ function initializeChart(forecastData) {
                             color: 'rgba(255, 255, 255, 0.1)' 
                         },
                         ticks: { 
-                            color: '#f0f4f8' // Hardcoded color for a direct fix
-                        },
-                        title: {
-                            display: true,
-                            text: `Temperature (${tempUnit})`,
-                            color: '#f0f4f8' // Hardcoded color for a direct fix
+                            color: '#f0f4f8'
                         }
                     },
                     x: {
@@ -242,7 +237,7 @@ function initializeChart(forecastData) {
                             display: false 
                         },
                         ticks: { 
-                            color: '#f0f4f8' // Hardcoded color for a direct fix
+                            color: '#f0f4f8'
                         }
                     }
                 },
@@ -251,6 +246,9 @@ function initializeChart(forecastData) {
                         display: false 
                     },
                     tooltip: {
+                        titleColor: '#f0f4f8',
+                        bodyColor: '#f0f4f8',
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
                         callbacks: {
                             label: function(context) {
                                 return `Temperature: ${context.raw}${tempUnit}`;
@@ -368,6 +366,7 @@ window.addEventListener('load', () => {
     cityInput.value = 'New Delhi';
     searchBtn.click();
 });
+
 
 
 
