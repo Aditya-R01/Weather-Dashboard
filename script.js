@@ -225,16 +225,31 @@ function initializeChart(forecastData) {
                 scales: {
                     y: {
                         beginAtZero: false,
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        ticks: { color: 'var(--text-light)' }
+                        grid: { 
+                            color: 'rgba(255, 255, 255, 0.1)' 
+                        },
+                        ticks: { 
+                            color: 'var(--text-light)' // Changed to a white CSS variable
+                        },
+                        title: {
+                            display: true,
+                            text: `Temperature (${tempUnit})`,
+                            color: 'var(--text-light)' // Added to label the y-axis
+                        }
                     },
                     x: {
-                        grid: { display: false },
-                        ticks: { color: 'var(--text-light)' }
+                        grid: { 
+                            display: false 
+                        },
+                        ticks: { 
+                            color: 'var(--text-light)' // Changed to a white CSS variable
+                        }
                     }
                 },
                 plugins: {
-                    legend: { display: false },
+                    legend: { 
+                        display: false 
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
@@ -353,5 +368,6 @@ window.addEventListener('load', () => {
     cityInput.value = 'New Delhi';
     searchBtn.click();
 });
+
 
 
